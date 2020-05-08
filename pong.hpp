@@ -1,10 +1,11 @@
 #include<math.h>
 #include<string.h>
+#include<ctype.h>
 #include<stdlib.h>
 #include<ncurses.h>
 #include<unistd.h>
 
-void missed();
+void missed(void);
 void player_movement(void);
 void print_player(void);
 void print_info(void);
@@ -18,4 +19,5 @@ void print_ball(void);
 void change_refresh_rate(void);
 void pause_game(void);
 void quit_game(void);
-
+void move_player(void);
+int player_moving(void);

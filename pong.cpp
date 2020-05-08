@@ -1,11 +1,11 @@
 #include "pong.hpp"
 
 #define DELAY 10000
-#define SIZE 5
+#define REFRESH 1000
 
 int a,bounces=1,
-  time_tracker=0,
-  refresh_rate=100;
+	SIZE=5,time_tracker=0,
+	refresh_rate=4*REFRESH;
 
 struct position { int x; int y;};
 
@@ -15,7 +15,10 @@ position max;
 position direction;
 
 
-int main(){
+int main(int argc, char*argv[]){
+  if ( argc==2  )
+	  SIZE = atoi(argv[1])>0 ? atoi(argv[1]) : 5;
+
   screen_setup();
   game_setup();
   
@@ -30,13 +33,20 @@ int main(){
     check_x();
     check_y();
 
-    if ( !(time_tracker % (refresh_rate*5)) )
+    if ( !(time_tracker % (refresh_rate)) )
       move_ball();
 
-    if ( !(time_tracker % refresh_rate) )
+
+    if ( !(time_tracker % REFRESH) )
       {
-		  erase();
 		  a = wgetch(stdscr);
+
+		  if ( player_moving() )
+		  {
+			  move_player();
+		  }
+
+		  erase();
 	
 		  if ( a == ' ' )
 			  pause_game();
@@ -53,6 +63,20 @@ int main(){
   quit_game();
 }
 
+int player_moving()
+{
+	return ( a == KEY_DOWN || a == KEY_UP ) ? 1 : 0;
+}
+
+void move_player()
+{
+	if ( a == KEY_DOWN )
+		player.y+=1;
+	if ( a == KEY_UP )
+		player.y-=1;
+}
+
+
 void quit_game()
 {
   endwin();
@@ -61,7 +85,7 @@ void quit_game()
 
 void change_refresh_rate(void)
 {
-  refresh_rate-=1;
+  refresh_rate*=0.9;
 }
 
 void player_movement()
@@ -91,7 +115,7 @@ void print_player()
 void print_info()
 {
   mvprintw(0,max.x/2,"(%d,%d) %d",ball.x,ball.y,time_tracker);
-  mvprintw(1,max.x/2,"(%d,%d)",player.x,player.y);
+  mvprintw(1,max.x/2,"(%d,%d) %d",player.x,player.y, refresh_rate);
 }
 
 void check_y()
@@ -106,7 +130,7 @@ void check_x()
 {
   // is it at x=0 or x=max.x?
   if(ball.x > max.x-1){
-	  bounces++;
+	  //bounces++;
 	  direction.x = -1;
   }
   if ((ball.x-1 < 0) && (direction.x == -1))
