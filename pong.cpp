@@ -24,7 +24,7 @@ int main(){
     time_tracker++;
     getmaxyx(stdscr,max.y,max.x);
 
-	if ( ball.x == max.x )
+	if ( ball.x == max.x && direction.x==1)
 		change_refresh_rate();
     
     check_x();
@@ -61,7 +61,7 @@ void quit_game()
 
 void change_refresh_rate(void)
 {
-  refresh_rate=refresh_rate;
+  refresh_rate-=1;
 }
 
 void player_movement()
