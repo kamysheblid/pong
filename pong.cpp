@@ -24,29 +24,30 @@ int main(){
     time_tracker++;
     getmaxyx(stdscr,max.y,max.x);
 
-//if ( (time_tracker % 1000) == 0)
-//     change_refresh_rate();
+	if ( ball.x == max.x )
+		change_refresh_rate();
     
     check_x();
     check_y();
 
-    if ( ( time_tracker % (refresh_rate/4/bounces) ) == 0)
+    if ( !(time_tracker % (refresh_rate*5)) )
       move_ball();
 
-    if ( (time_tracker/bounces) % (refresh_rate/bounces) == 0)
+    if ( !(time_tracker % refresh_rate) )
       {
-	erase();
-	a = wgetch(stdscr);
-	if ( a == ' ' )
-	  pause_game();	
+		  erase();
+		  a = wgetch(stdscr);
+	
+		  if ( a == ' ' )
+			  pause_game();
 
-	player_movement();
-	print_info();
-	print_player();
-	print_ball();
-	refresh();
-	usleep(DELAY);
-      }
+		  player_movement();
+		  print_info();
+	  	  print_player();
+		  print_ball();
+		  refresh();
+		  usleep(DELAY);
+	  }
   }
   
   quit_game();
@@ -60,7 +61,7 @@ void quit_game()
 
 void change_refresh_rate(void)
 {
-  refresh_rate-=1;
+  refresh_rate=refresh_rate;
 }
 
 void player_movement()
